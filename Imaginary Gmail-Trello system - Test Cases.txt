@@ -1,0 +1,91 @@
+# The following need to be tested on different web browsers (Chrome, Edge, Firefox, Safari, ChatGPT Atlas, Opera, Brave, Comet, Tor etc.)
+# and when available also on iOS and Android devices that are based on those OS (Samsung, Xiaomi, Apple, Realme etc.)
+
+(Apps functionality validation:)
+-------------------------------------------
+
+1) Need to verify we can login to Imaginary Gmail successfully and all works so we can start to sync
+
+2) Need to verify we can login to Trello’s board successfully - UI elements are seen as expected and working so we can start to sync
+
+
+(Sync between Imaginary Gmail and Trello:)
+-------------------------------------------
+
+3) Verify existing text and data are aligned for the Imaginary Gmail and Trello and that each mail that appears in Gmail
+inbox also appearing in Trello’s board (each card should have a matched mail in Gmail inbox) -
+Should be done on UI, API responses and also on DB to verify data is aligned (all columns on DB table)
+
+4) Verify that after successful sync data action usage between the Imaginary Gmail and Trello that each mail that appears in Gmail
+inbox also appearing in Trello’s board (each card should have a matched mail in Gmail inbox) and text and data are aligned and correct -
+on UI: texts are aligned, API: server side request is valid + response is 200 OK with correct response data, DB: All data on DB tables is aligned and correct
+
+5) Verify in case that sync data action was done while there was no internet connection there is async requests mechanism that done after internet connection is back and data were synced
+
+6) Verify in case that sync data action was done while server is down a proper 5XX internal server error is returned with informative message on response
+
+
+(Data between Imaginary Gmail and Trello after new mail sent:)
+-------------------------------------------
+
+7) On new mail sent - Verify that each mail that appears in Gmail inbox also appearing in Trello’s board in the “To Do” Column as a new card with the label “New”
+(each card should have a matched mail in Gmail inbox)
+
+8) On new mail sent - Verify Trello’s card title is as the mail’s subject (the subject line after "Task:" or mail subject) - Needs to be done on UI + API responses + DB:
+Steps:
+a. Open Imaginary Gmail app
+b. Send new mail to Gmail and verify you see it on UI, server API response is 200 OK and DB record was added
+c. Verify in Trello’s board card was added to “To Do” Column as a new card with the label “New” on UI + GET API to check new card is seen on response + new card record was added to DB
+d. Verify card title is as the mail’s subject(the subject line after "Task:" or mail subject) on UI + GET API to check new card with correct card title in response + card title column is correct on DB
+
+9) On new mail sent - Verify Trello’s card description should be as the mail’s body - Needs to be done on UI + API responses + DB
+
+10) On new mail sent - Verify each mail that its body contains the word “Urgent” should appear as a card in Trello with “Urgent” label - Needs to be done on UI + API responses + DB
+
+11) On new mail sent - Verify that each card in “done” column should have a matched mail that appears in Gmail’s trash box - Needs to be done on UI + API responses + DB
+
+12) On new mail sent - Verify that Cards in “In Progress” have matched mails in Gmail inbox - Needs to be done on UI + API responses + DB
+
+13) On new mail sent - Verify no card duplications when there is more than one email with the same subject and body, it will appear as one card in Trello - Needs to be done on UI + API responses + DB
+
+14) On new mail sent - Verify body text merging when there are some emails with the same subject (and different body), and they will appear as one card in Trello - Needs to be done on UI + API responses + DB
++ Validate the same for mail replies to same mail (subject is the same but the body is different)
+
+15) On new mail sent - Verify file attachment can be parsed on Trello’s board is sent
+
+16) Verify all tests above for different languages(Spanish, Hebrew, Italian, Chinese etc.) in mails body and that it also can be synced/parsed successfully
+
+(Negative/Rainy days - Data between Imaginary Gmail and Trello after mail sent:)
+17) On new mail sent but no internet connection while using Trello - Verify async requests mechanism that done after internet connection is back and data was created
+
+18) On new mail sent but server was coming down while using Trello - Verify proper 5XX internal server error is returned with informative message on response
+
+19) On new mail sent which subject could not be parsed or is not valid - Verify card not added on trello and return proper error message on UI, 4XX response on API and mark DB data with flag as not valid
+
+20) On new mail sent which body could not be parsed or is not valid - Verify card not added on trello and return proper error message on UI, 4XX response on API and mark DB data with flag as not valid
+
+21) On new mail sent with empty subject - In trello show (No subject) or don't show it on board (Product Architect decision :))
+
+22) On new mail sent with empty body - In trello show (No body) or don't show it on board (Product Architect decision :))
+
+23) On new mail which his label cannot be parsed on trello - Verify card not added on trello and return proper error message on UI, 4XX response on API and mark DB data with flag as not valid
+
+
+(Performance test section:)
+-------------------------------------------
+24) Check all the tests above in case 500+ mails are sent at once and all is appearing correctly on Trello’s board
+
+
+(Trello’s board card functionality validation tests:)
+-------------------------------------------
+25) Verify cards on Trello’s board can move between statuses by moving between columns on UI + new status is updated on GET API after + On DB correct card status appearing
+
+26) Verify cards on Trello’s board can move between statuses by entering card and edit status on card UI + new status is updated on GET API after + On DB correct card status appearing
+
+27) Verify you can add label to card on UI + new label is updated on GET API after + On DB correct card label is appearing
+
+28) Verify you can remove label from card on UI + label is removed on GET API after + On DB label is not appearing
+
+29) Verify you can edit card description on UI + new description is updated on GET API after + On DB correct card description is appearing
+
+30) Verify you can add comment to card on UI + new comment is added on GET API after + On DB correct comment is appearing
